@@ -1,0 +1,44 @@
+{
+  "name": "vite-chrome-extension",
+  "description": "又快又爽的开发 Chrome 扩展程序应用",
+  "version": "0.0.1",
+  "author": {
+    "name": "Kip",
+    "email": "kipsong@sina.com"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit --skipLibCheck && vite build ",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@ant-design/icons": "^4.7.0",
+    "antd": "^4.23.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.4.1"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.170",
+    "@types/node": "^16.11.12",
+    "@types/react": "^18.0.21",
+    "@types/react-dom": "^18.0.6",
+    "@types/react-router-dom": "^5.3.3",
+    "@typescript-eslint/eslint-plugin": "^5.38.0",
+    "@typescript-eslint/parser": "^5.38.0",
+    "@vitejs/plugin-react": "^1.0.7",
+    "eslint": "^8.24.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.31.8",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-simple-import-sort": "^8.0.0",
+    "less": "^4.1.2",
+    "prettier": "^2.7.1",
+    "rollup-plugin-copy": "^3.4.0",
+    "typescript": "^4.4.4",
+    "vite": "^2.7.1",
+    "vite-plugin-style-import": "^1.4.0"
+  }
+}

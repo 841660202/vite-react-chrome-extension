@@ -1,0 +1,48 @@
+.sider {
+  width: 40px !important;
+  max-width: 40px !important;
+  min-width: 40px !important;
+  height: 100%;
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    width: 0 !important;
+  }
+}
+
+.menu {
+  width: 60px;
+  height: 100%;
+}
+
+body {
+  width: 300px;
+  height: 300px;
+  overflow: hidden;
+}
+
+.header {
+  height: 48px;
+  background-color: #fff;
+  box-shadow: 0px 0px 1px rgb(179, 176, 176);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 10px;
+  padding-left: 4px;
+  font-size: 18px;
+  position: fixed;
+  width: 100%;
+  .avatar {
+    cursor: pointer;
+    box-shadow: 0px 0px 10px 0px #071ff1;
+    width: 33px;
+  }
+  .headerLeft {
+    flex: 1;
+    padding-left: 10px;
+  }
+}
+.btn {
+  cursor: pointer;
+}
