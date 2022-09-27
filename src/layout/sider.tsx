@@ -53,7 +53,7 @@ const LayoutSider: React.FC<IProps> = () => {
         className={styles.menu}
         items={menuItems}
         mode="inline"
-        defaultSelectedKeys={['1']}
+        defaultSelectedKeys={['/home']}
       ></Menu>
     </Sider>
   )
