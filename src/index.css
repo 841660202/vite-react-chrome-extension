@@ -12,3 +12,30 @@ body {
 .page-body {
   padding: 10px;
 }
+#error-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding-top: 60px;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+.flex-row-c {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.flex-1 {
+  flex: 1;
+}
+.flex-row-b {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}

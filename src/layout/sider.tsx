@@ -1,27 +1,40 @@
-import { HomeOutlined, SlackOutlined, ThunderboltFilled } from '@ant-design/icons'
+import { DoubleRightOutlined, QuestionCircleOutlined } from '@ant-design/icons'
 import { Layout, Menu } from 'antd'
-import React from 'react'
-import { NavLink } from 'react-router-dom'
+import classNames from 'classnames'
+import React, { useCallback, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import NumberIcon from '@/components/NumberIcon'
+import { randomColor } from '@/utils/random'
 
 import styles from './index.module.less'
 const { Sider } = Layout
 
 interface IProps {}
 const LayoutSider: React.FC<IProps> = () => {
-  const menuItems = [
-    { icon: <HomeOutlined />, title: '', key: '/home' },
-    { icon: <SlackOutlined />, title: '', key: '/help' },
-  ].concat(
-    Array(20)
-      .fill(0)
-      .map((item, index) => ({ icon: <NumberIcon text={index + 1} />, title: '', key: `/help/${index}` })),
+  const menuItems = useMemo(
+    () =>
+      [
+        { icon: <DoubleRightOutlined />, title: '', key: '/home' },
+        { icon: <QuestionCircleOutlined />, title: '', key: '/help' },
+      ].concat(
+        Array(20)
+          .fill(0)
+          .map((item, index) => ({
+            icon: <NumberIcon color={randomColor()} text={index + 1} />,
+            title: '',
+            key: `/help/${index}`,
+          })),
+      ),
+    [],
   )
+  const navigate = useNavigate()
+  const handleGo = useCallback((item: any) => {
+    navigate(item.key)
+  }, [])
   return (
     <Sider
       style={{
-        overflow: 'auto',
         height: '100vh',
         position: 'fixed',
         left: 0,
@@ -29,24 +42,19 @@ const LayoutSider: React.FC<IProps> = () => {
         bottom: 0,
         paddingTop: 44,
       }}
-      className={styles.sider}
+      className={classNames(styles.sider, 'custom')}
       collapsed={true}
       trigger={null}
       theme={'light'}
     >
-      <Menu className={styles.menu} items={menuItems} mode="inline" defaultSelectedKeys={['1']}>
-        {/* <Menu.Item key="1" icon={<HomeOutlined />}>
-          <NavLink to={'/home'}>Home</NavLink>
-        </Menu.Item>
-        <Menu.Item key="2" icon={<SlackOutlined />}>
-          <NavLink to={'/help'}>Home</NavLink>
-        </Menu.Item>
-        {Array(20)
-          .fill(0)
-          .map((item, index) => (
-            <Menu.Item key={index + 3} icon={<NumberIcon text={`${index}`} />}></Menu.Item>
-          ))}*/}
-      </Menu>
+      <Menu
+        style={{ overflowY: 'auto', background: '#000', color: '#fff' }}
+        onClick={handleGo}
+        className={styles.menu}
+        items={menuItems}
+        mode="inline"
+        defaultSelectedKeys={['1']}
+      ></Menu>
     </Sider>
   )
 }

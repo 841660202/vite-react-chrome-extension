@@ -15,7 +15,7 @@ export default (props: LayoutProps) => {
       <LayoutSider />
       <Layout style={{ backgroundColor: '#fff', overflowY: 'hidden' }}>
         <LayoutHeader />
-        <Content style={{ padding: 40, paddingTop: 44, overflowY: 'auto' }}>
+        <Content style={{ paddingLeft: 40, paddingTop: 44, overflowY: 'hidden' }}>
           <Outlet />
         </Content>
       </Layout>

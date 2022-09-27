@@ -4,9 +4,15 @@ import styles from './index.module.less'
 interface IProps {
   text: string | number
   children?: React.ReactNode
+  color?: string
 }
 const NumberIcon: React.FC<IProps> = (props) => {
-  return <span className={styles.number}>{props.text || props.children}</span>
+  const { color } = props
+  return (
+    <span className={styles.number} style={{ background: color }}>
+      {props.text || props.children}
+    </span>
+  )
 }
 
 export default NumberIcon

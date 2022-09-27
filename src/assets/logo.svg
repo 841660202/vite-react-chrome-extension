@@ -1,0 +1,28 @@
+<svg data-v-2cb57da0="" version="1.0" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%" viewBox="0 0 340.000000 250.000000" preserveAspectRatio="xMidYMid meet" color-interpolation-filters="sRGB" style="margin: auto;">
+  <rect data-v-2cb57da0="" x="0" y="0" width="100%" height="100%" fill="#feffff" fill-opacity="1" class="background"></rect>
+  <rect data-v-2cb57da0="" x="0" y="0" width="100%" height="100%" fill="url(#watermark)" fill-opacity="1" class="watermarklayer"></rect>
+  <g data-v-2cb57da0="" fill="#333" class="iconlettersvg-g iconlettersvg" transform="translate(142.9550380706787,100.00003433227539)">
+    <g>
+      <g class="tp-name">
+        <g transform="scale(1)">
+          <g transform="translate(0, 0)">
+            <g class="name-imagesvg">
+              <g>
+                <rect fill="#333" fill-opacity="0" stroke-width="2" x="0" y="0" width="54.08992525471851" height="50" class="image-rect"></rect>
+                <svg x="0" y="0" width="54.08992525471851" height="50" filtersec="colorsb6150616788" class="image-svg-svg primary" style="overflow: visible;">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 131.96 121.98">
+                    <title>M</title>
+                    <path d="M66 8.7A40.81 40.81 0 0 0 0 40.85v65.42a15.71 15.71 0 0 0 31.42 0V40.85a9.43 9.43 0 0 1 18.85 0A40.79 40.79 0 0 1 66 8.7z" fill="#000"></path>
+                    <path d="M91.11 0A40.62 40.62 0 0 0 66 8.7a40.79 40.79 0 0 1 15.69 32.15 9.43 9.43 0 0 1 18.85 0v65.42a15.71 15.71 0 0 0 31.42 0V40.85A40.9 40.9 0 0 0 91.11 0z" fill="#000"></path>
+                    <path d="M66 8.7a40.79 40.79 0 0 0-15.73 32.15v65.42a15.71 15.71 0 1 0 31.42 0V40.85A40.79 40.79 0 0 0 66 8.7z" fill="#000"></path>
+                  </svg>
+                </svg> <!---->
+              </g>
+            </g>
+          </g>
+        </g>
+      </g>
+    </g> <!---->
+  </g>
+  <defs v-gra="od"></defs>
+</svg>
