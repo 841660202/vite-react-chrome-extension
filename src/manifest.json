@@ -25,6 +25,13 @@
     "storage",
     "cookies"
   ],
+  "host_permissions": [
+    "https://*/",
+    "http://*/"
+  ],
+  "optional_host_permissions": [
+    "*://*/*"
+  ],
   "content_scripts": [
     {
       "matches": [
@@ -36,8 +43,5 @@
       "run_at": "document_start",
       "all_frames": true
     }
-  ],
-  "host_permissions": [
-    "https://*/"
   ]
 }
