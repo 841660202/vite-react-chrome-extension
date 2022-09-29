@@ -3,6 +3,7 @@ import { Avatar, Layout, Space, Tooltip } from 'antd'
 import React, { useRef } from 'react'
 
 import HeaderAddType from './header-add'
+import HeaderAddPan from './header-addpan'
 import HeaderMore from './header-more'
 import HeaderRun from './header-run'
 import styles from './index.module.less'
@@ -18,7 +19,7 @@ const LayoutHeader: React.FC<IProps> = () => {
       <Header className={styles.header}>
         <MenuUnfoldOutlined onClick={() => refSiderDrawer.current?.open()} style={{ marginRight: 16, marginLeft: 8 }} />
         <Avatar className={styles.avatar} src="http://t-blog-images.aijs.top/img/avatar.jpeg" />
-
+        <HeaderAddPan />
         <div className={styles.headerLeft}>{'hostname'}</div>
         <div className={styles.headerRight}>
           <Space>

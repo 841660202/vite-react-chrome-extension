@@ -17,6 +17,8 @@ declare interface Cookie {
   url: string
   expirationDate: number
   httpOnly: boolean
+  hostOnly?: boolean
+  session?: boolean
   name: string
   path: string
   sameSite: 'unspecified' | 'no_restriction' | 'lax' | 'strict'
@@ -30,13 +32,19 @@ declare interface Domain {
   domain: string
   cookies: []
   checked?: boolean
+  uuid: string
   tag?: 'day' | 'test' | 'pre' | 'pro'
 }
 
 declare interface Pan {
   uuid: string
-  label: string
-  bg_color: string
-  ft_color: string
+  name: string
+  bg_color?: string
+  ft_color?: string
   checked?: boolean
+}
+
+declare interface CellEdit {
+  name: string
+  value: string
 }

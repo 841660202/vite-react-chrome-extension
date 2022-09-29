@@ -1,37 +1,54 @@
 import { DoubleRightOutlined, QuestionCircleOutlined } from '@ant-design/icons'
+import { useMemoizedFn } from 'ahooks'
 import { Layout, Menu } from 'antd'
 import classNames from 'classnames'
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useContext, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import { getPans } from '@/chrome/pans'
 import NumberIcon from '@/components/NumberIcon'
-import { randomColor } from '@/utils/random'
+import { GlobalContext } from '@/context/globalContext'
 
 import styles from './index.module.less'
 const { Sider } = Layout
 
 interface IProps {}
 const LayoutSider: React.FC<IProps> = () => {
-  const menuItems = useMemo(
-    () =>
-      [
-        { icon: <DoubleRightOutlined />, title: '', key: '/home' },
-        { icon: <QuestionCircleOutlined />, title: '', key: '/help' },
-      ].concat(
-        Array(20)
-          .fill(0)
-          .map((item, index) => ({
-            icon: <NumberIcon color={randomColor()} text={index + 1} />,
-            title: '',
-            key: `/help/${index}`,
-          })),
-      ),
-    [],
-  )
   const navigate = useNavigate()
   const handleGo = useCallback((item: any) => {
+    console.log('item.key', item.key)
     navigate(item.key)
   }, [])
+
+  const { pans, setPans } = useContext(GlobalContext)
+
+  const handleGetPans = useMemoizedFn(async () => {
+    const res = await getPans()
+    setPans(res || [])
+  })
+
+  const menuItems = useMemo(() => {
+    const defaultMenus = [
+      { icon: <DoubleRightOutlined />, title: '', key: '/home' },
+      { icon: <QuestionCircleOutlined />, title: '', key: '/help' },
+    ]
+
+    return ([] as any).concat(defaultMenus).concat(
+      pans.map((item: Pan, index) => {
+        console.log(`/pan/${item.uuid}`)
+        return {
+          icon: <NumberIcon text={index + 1} ft_color={item.ft_color} bg_color={item.bg_color} />,
+          title: item.name,
+          key: `/pan/${item.uuid}`,
+        }
+      }),
+    )
+  }, [pans])
+
+  useEffect(() => {
+    handleGetPans()
+  }, [])
+
   return (
     <Sider
       style={{

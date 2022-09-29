@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom/client'
 import { createMemoryRouter, Route, RouterProvider } from 'react-router-dom'
 
 import ErrorPage from './components/Error'
+import { GlobalContext, useGlobalState } from './context/globalContext'
 import Layout from './layout'
 import Helper from './views/Helper'
 import Home from './views/Home'
@@ -20,11 +21,15 @@ const router = createMemoryRouter(
           errorElement: <ErrorPage />,
           children: [
             {
-              path: '/home',
+              path: 'home',
               element: <Home />,
             },
             {
-              path: '/help',
+              path: 'help',
+              element: <Helper />,
+            },
+            {
+              path: 'pan/:id',
               element: <Helper />,
             },
           ],
@@ -42,8 +47,19 @@ const router = createMemoryRouter(
   },
 )
 
+const BaseRoot = () => {
+  const global = useGlobalState()
+  return (
+    <>
+      <GlobalContext.Provider value={global}>
+        <RouterProvider router={router} />
+      </GlobalContext.Provider>
+    </>
+  )
+}
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <BaseRoot />
   </React.StrictMode>,
 )

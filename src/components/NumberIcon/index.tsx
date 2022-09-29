@@ -4,12 +4,13 @@ import styles from './index.module.less'
 interface IProps {
   text: string | number
   children?: React.ReactNode
-  color?: string
+  ft_color?: string
+  bg_color?: string
 }
 const NumberIcon: React.FC<IProps> = (props) => {
-  const { color } = props
+  const { ft_color, bg_color } = props
   return (
-    <span className={styles.number} style={{ background: color }}>
+    <span className={styles.number} style={{ background: bg_color, color: ft_color }}>
       {props.text || props.children}
     </span>
   )

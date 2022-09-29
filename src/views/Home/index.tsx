@@ -1,11 +1,16 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 const { Panel } = Collapse
-import { CloseCircleOutlined, DisconnectOutlined, LinkOutlined } from '@ant-design/icons'
-import { Button, Checkbox, Collapse, Input, message } from 'antd'
+import { CloseCircleOutlined } from '@ant-design/icons'
+import { useMemoizedFn } from 'ahooks'
+import { Button, Checkbox, Collapse, Input } from 'antd'
 import classNames from 'classnames'
 
-import CheckEdit from '@/components/CheckEdit'
+import { getAllCookies } from '@/chrome/cookies'
+import { getPans, savePan } from '@/chrome/pans'
+import PanEdit from '@/components/PanEdit'
+import { GlobalContext } from '@/context/globalContext'
 import { mock } from '@/mock'
+import { genUUID } from '@/utils'
 
 import styles from './index.module.less'
 
@@ -13,8 +18,8 @@ interface IProps {}
 // const domains = ['www.baidu.com', 'www.baidu.cn', 'www.baidu.top']
 const Home: React.FC<IProps> = (props) => {
   const [hostname, setHostname] = useState<string>(mock.hostname)
-  const [inputValue, setInputValue] = useState()
-  const [domains, setDomains] = useState([])
+  const [inputValue, setInputValue] = useState('')
+  const { domains, setDomains } = useContext(GlobalContext)
   const handleInit = useCallback(async () => {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
     if (tab?.url) {
@@ -27,17 +32,33 @@ const Home: React.FC<IProps> = (props) => {
 
   useEffect(() => {
     handleInit()
-  }, [handleInit])
+  }, [])
+
+  const handleGetDomainInfo = useMemoizedFn(async (domain: Domain) => {
+    const res = await getAllCookies({ domain: domain.domain })
+    const target = domains.find((item) => item.uuid === domain.uuid)
+    if (target) {
+      target.cookies = res
+    } else {
+      domain.cookies = res
+      domains.push(domain)
+    }
+    setDomains(domains)
+  })
+
   const handleAdd = useCallback(
     (e: any) => {
       if (!inputValue) return
-      setDomains([].concat(domains).concat(inputValue))
+      const domain: Domain = { domain: inputValue, cookies: [], uuid: genUUID() }
+      setDomains(([] as Domain[]).concat(domains).concat(domain))
       setInputValue('')
-      message.success('success')
+      handleGetDomainInfo(domain)
+      // message.success('success')
       e?.preventDefault()
     },
-    [domains, inputValue],
+    [domains, handleGetDomainInfo, inputValue, setDomains],
   )
+
   const handleChangeInput = useCallback((e: any) => {
     setInputValue(e.target.value)
   }, [])
@@ -48,8 +69,9 @@ const Home: React.FC<IProps> = (props) => {
           <Input
             value={inputValue}
             onChange={handleChangeInput}
-            placeholder="选取新域名"
+            placeholder="新域名"
             size="small"
+            onPressEnter={handleAdd}
             className={styles.domainInput}
           />
           <Button type="primary" size="small" onClick={handleAdd}>
@@ -62,27 +84,23 @@ const Home: React.FC<IProps> = (props) => {
               <Panel
                 header={
                   <div className="flex-row-c" style={{ paddingRight: 10 }}>
-                    <Checkbox>{item}</Checkbox>
+                    <Checkbox>{item.domain}</Checkbox>
 
                     <CloseCircleOutlined style={{ marginLeft: 10 }} />
                   </div>
                 }
-                key={item}
+                key={item.uuid}
               >
-                <CheckEdit disabled />
-                <CheckEdit disabled />
-                <CheckEdit disabled />
-                <CheckEdit disabled />
+                <PanEdit disabled category={'Cookies'} type="cookies" data={item} />
               </Panel>
             ))}
           </Collapse>
         </div>
       </div>
       <div className={classNames('flex-1', styles.rightContent)}>
-        <CheckEdit />
-        <CheckEdit />
-        <CheckEdit />
-        <CheckEdit />
+        <PanEdit category="Cookies" data={undefined} type={''} />
+        <PanEdit category="Request Header" />
+        <PanEdit category="Reponse Header" />
       </div>
     </div>
   )

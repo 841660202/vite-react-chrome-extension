@@ -1,0 +1,30 @@
+{
+  "pans": [
+    {
+      "panId": "1",
+      "domain": [
+        {
+          "domain": "www.baidu.com",
+          "uuid": "12121212",
+          "cookies": [
+            {
+              "domain": "string",
+              "url": "string",
+              "expirationDate": "number",
+              "httpOnly": "boolean",
+              "hostOnly": "boolean",
+              "session": "boolean",
+              "name": "string",
+              "path": "string",
+              "sameSite": "",
+              "secure": "boolean",
+              "storeId": "string",
+              "value": "string",
+              "checked": "boolean"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
