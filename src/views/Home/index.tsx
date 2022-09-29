@@ -5,7 +5,10 @@ import { useMemoizedFn } from 'ahooks'
 import { Button, Checkbox, Collapse, Input } from 'antd'
 import classNames from 'classnames'
 
+import { getChromeCurrentTab } from '@/chrome/chrome'
 import { getAllCookies } from '@/chrome/cookies'
+import { getPanDomainsByPanId, removePanDomainById, savePanDomain } from '@/chrome/domains'
+import { getOrCreateCurrentDomainByPanId } from '@/chrome/pan-current-domain'
 import { getPans, savePan } from '@/chrome/pans'
 import PanEdit from '@/components/PanEdit'
 import { GlobalContext } from '@/context/globalContext'
@@ -17,33 +20,44 @@ import styles from './index.module.less'
 interface IProps {}
 // const domains = ['www.baidu.com', 'www.baidu.cn', 'www.baidu.top']
 const Home: React.FC<IProps> = (props) => {
+  const panId = '123'
   const [hostname, setHostname] = useState<string>(mock.hostname)
   const [inputValue, setInputValue] = useState('')
-  const { domains, setDomains } = useContext(GlobalContext)
+  const { domains, setDomains, currentDomain, setCurrentDomain } = useContext(GlobalContext)
   const handleInit = useCallback(async () => {
-    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
+    const tab = await getChromeCurrentTab()
     if (tab?.url) {
       try {
         const url = new URL(tab.url)
+        handleGetCurrentDomain({ domain: url.hostname })
         setHostname(url.hostname)
       } catch {}
     }
   }, [])
 
+  const handleGetCurrentDomain = useMemoizedFn(async (domain) => {
+    const res = await getOrCreateCurrentDomainByPanId(panId, domain)
+    setCurrentDomain(res)
+  })
   useEffect(() => {
     handleInit()
+    handleGetPanDomainsByPanId()
   }, [])
 
   const handleGetDomainInfo = useMemoizedFn(async (domain: Domain) => {
     const res = await getAllCookies({ domain: domain.domain })
     const target = domains.find((item) => item.uuid === domain.uuid)
+    let _domain
     if (target) {
       target.cookies = res
+      _domain = target
     } else {
       domain.cookies = res
-      domains.push(domain)
+      _domain = domain
+      // domains.push(domain)
     }
-    setDomains(domains)
+    handleSavePanDomains(_domain)
+    // setDomains(domains)
   })
 
   const handleAdd = useCallback(
@@ -59,9 +73,24 @@ const Home: React.FC<IProps> = (props) => {
     [domains, handleGetDomainInfo, inputValue, setDomains],
   )
 
+  const handleSavePanDomains = useMemoizedFn(async (domain) => {
+    console.log('domain', domain)
+    const res = await savePanDomain(panId, domain)
+    console.log('res', res)
+  })
+
+  const handleGetPanDomainsByPanId = useMemoizedFn(async () => {
+    const res = await getPanDomainsByPanId(panId)
+    setDomains(res)
+  })
   const handleChangeInput = useCallback((e: any) => {
     setInputValue(e.target.value)
   }, [])
+  const handleCloseDomain = useMemoizedFn(async (domain, e) => {
+    e?.stopPropagation()
+    const res = await removePanDomainById(panId, domain)
+    handleGetPanDomainsByPanId()
+  })
   return (
     <div className={'custom flex-row'} style={{ overflowY: 'hidden', height: '100%' }}>
       <div className={classNames('flex-1', styles.leftContent)}>
@@ -86,7 +115,7 @@ const Home: React.FC<IProps> = (props) => {
                   <div className="flex-row-c" style={{ paddingRight: 10 }}>
                     <Checkbox>{item.domain}</Checkbox>
 
-                    <CloseCircleOutlined style={{ marginLeft: 10 }} />
+                    <CloseCircleOutlined onClick={(e) => handleCloseDomain(item, e)} style={{ marginLeft: 10 }} />
                   </div>
                 }
                 key={item.uuid}
@@ -98,7 +127,7 @@ const Home: React.FC<IProps> = (props) => {
         </div>
       </div>
       <div className={classNames('flex-1', styles.rightContent)}>
-        {/* <PanEdit category="Cookies" data={undefined} /> */}
+        <PanEdit category={'Cookies'} type="cookies" data={currentDomain} />
         {/* <PanEdit category="Request Header" /> */}
         {/* <PanEdit category="Reponse Header" /> */}
       </div>

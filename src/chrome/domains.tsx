@@ -12,8 +12,8 @@ const key_domains_store = localforage.createInstance({
  * @param domain
  * @returns
  */
-export const savePanDomains = async (panId: string | number, domain: Domain) => {
-  const key = `${panId}_${domain.domain}`
+export const savePanDomain = async (panId: string | number, domain: Domain) => {
+  const key = `${panId}_${domain.uuid}`
   let find = await key_domains_store.getItem(key)
   if (find) {
     find = {
@@ -70,4 +70,17 @@ export const removeDomainsByPanId = async (panId: string | number) => {
  */
 export const removePanDomainById = (panId: string | number, domain: Domain) => {
   return key_domains_store.removeItem(`${panId}_${domain.uuid}`) || []
+}
+
+export const getPanDomainsByPanId = async (panId: string | number) => {
+  const keys = await key_domains_store.keys()
+  const promises: Promise<any>[] = []
+  keys
+    .filter((item) => {
+      return item.split('_')[0] === panId
+    })
+    .forEach(async (k) => {
+      promises.push(key_domains_store.getItem(k))
+    })
+  return Promise.all(promises)
 }

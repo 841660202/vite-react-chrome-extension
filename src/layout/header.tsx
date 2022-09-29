@@ -2,6 +2,8 @@ import { MenuUnfoldOutlined, ReloadOutlined } from '@ant-design/icons'
 import { Avatar, Layout, Space, Tooltip } from 'antd'
 import React, { useRef } from 'react'
 
+import useGlobalContext from '@/context/globalContext'
+
 import HeaderAddType from './header-add'
 import HeaderAddPan from './header-addpan'
 import HeaderMore from './header-more'
@@ -13,6 +15,7 @@ const { Header } = Layout
 interface IProps {}
 const LayoutHeader: React.FC<IProps> = () => {
   const refSiderDrawer = useRef<IRefModal>()
+  const { currentDomain } = useGlobalContext()
 
   return (
     <>
@@ -20,7 +23,7 @@ const LayoutHeader: React.FC<IProps> = () => {
         <MenuUnfoldOutlined onClick={() => refSiderDrawer.current?.open()} style={{ marginRight: 16, marginLeft: 8 }} />
         <Avatar className={styles.avatar} src="http://t-blog-images.aijs.top/img/avatar.jpeg" />
         <HeaderAddPan />
-        <div className={styles.headerLeft}>{'hostname'}</div>
+        <div className={styles.headerLeft}>{currentDomain?.domain}</div>
         <div className={styles.headerRight}>
           <Space>
             <Tooltip title="刷新">

@@ -18,7 +18,9 @@ const PanEdit: React.FC<IProps> = (props) => {
 
   return (
     <ul className={styles.editList}>
-      <p>{category}</p>
+      <p>
+        {category}-{data?.domain}
+      </p>
       {data?.[type]?.map((item: any) => (
         <CheckEdit key={item.name} data={item} disabled={disabled} />
       ))}
