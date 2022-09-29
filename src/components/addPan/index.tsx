@@ -3,6 +3,7 @@ import { Form, Input, message, Modal } from 'antd'
 import React, { forwardRef, useImperativeHandle, useState } from 'react'
 
 import { savePan } from '@/chrome/pans'
+import useGlobalContext from '@/context/globalContext'
 import { randomColor } from '@/utils/random'
 
 import ColorPicker from '../ColorPicker'
@@ -11,6 +12,7 @@ interface IProps {
 }
 const AddPanModal: React.FC<IProps> = forwardRef((props, ref) => {
   const [visible, setVisible] = useState(false)
+  const { pans, setPans } = useGlobalContext()
   const [form] = Form.useForm()
   useImperativeHandle(
     ref,
@@ -27,12 +29,13 @@ const AddPanModal: React.FC<IProps> = forwardRef((props, ref) => {
 
   const handleSubmit = useMemoizedFn(() => {
     form.validateFields().then(async (values) => {
-      console.log('values', values)
       const res = await savePan({
         ...values,
       })
       if (res.uuid) {
         setVisible(false)
+        pans.push(res)
+        setPans([...pans])
         message.success('success')
       }
     })

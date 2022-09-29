@@ -6,8 +6,8 @@ const defaultCheckedList = ['Apple', 'Orange']
 import styles from './index.module.less'
 interface IProps {
   disabled?: boolean
-  category: string
-  data: Domain
+  category?: string
+  data?: Domain
   type: 'cookies'
 }
 const PanEdit: React.FC<IProps> = (props) => {

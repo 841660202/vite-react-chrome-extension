@@ -1,36 +1,58 @@
 import './index.css'
 
-import React from 'react'
+import React, { lazy, Suspense } from 'react'
 import ReactDOM from 'react-dom/client'
 import { createMemoryRouter, Route, RouterProvider } from 'react-router-dom'
 
-import ErrorPage from './components/Error'
+import PageLoad from './components/LoadPage'
 import { GlobalContext, useGlobalState } from './context/globalContext'
-import Layout from './layout'
-import Helper from './views/Helper'
-import Home from './views/Home'
+
+const ErrorPage = lazy(() => import('./components/Error'))
+const Layout = lazy(() => import('./layout'))
+const Helper = lazy(() => import('./views/Helper'))
+const Home = lazy(() => import('./views/Home'))
 
 const router = createMemoryRouter(
   [
     {
       path: '/',
       errorElement: <ErrorPage />,
-      element: <Layout />,
+      element: (
+        <Suspense fallback={<PageLoad />}>
+          <Layout />
+        </Suspense>
+      ),
       children: [
         {
-          errorElement: <ErrorPage />,
+          errorElement: (
+            <Suspense fallback={<PageLoad />}>
+              <ErrorPage />
+            </Suspense>
+          ),
           children: [
             {
               path: 'home',
-              element: <Home />,
+              element: (
+                <Suspense fallback={<PageLoad />}>
+                  <Home />
+                </Suspense>
+              ),
             },
             {
               path: 'help',
-              element: <Helper />,
+              element: (
+                <Suspense fallback={<PageLoad />}>
+                  <Helper />
+                </Suspense>
+              ),
             },
             {
               path: 'pan/:id',
-              element: <Helper />,
+              element: (
+                <Suspense fallback={<PageLoad />}>
+                  <Helper />
+                </Suspense>
+              ),
             },
           ],
         },

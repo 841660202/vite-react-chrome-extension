@@ -98,9 +98,9 @@ const Home: React.FC<IProps> = (props) => {
         </div>
       </div>
       <div className={classNames('flex-1', styles.rightContent)}>
-        <PanEdit category="Cookies" data={undefined} type={''} />
-        <PanEdit category="Request Header" />
-        <PanEdit category="Reponse Header" />
+        {/* <PanEdit category="Cookies" data={undefined} /> */}
+        {/* <PanEdit category="Request Header" /> */}
+        {/* <PanEdit category="Reponse Header" /> */}
       </div>
     </div>
   )

@@ -2,7 +2,7 @@ import { PlusCircleOutlined } from '@ant-design/icons'
 import { useMemoizedFn } from 'ahooks'
 import React, { useRef } from 'react'
 
-import AddPanModal from '@/components/addPan'
+import AddPanModal from '@/components/AddPan'
 interface IProps {}
 const HeaderAddPan: React.FC<IProps> = (props) => {
   const ref = useRef<IRefModal>(null)

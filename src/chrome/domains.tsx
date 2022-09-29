@@ -1,31 +1,73 @@
 import localforage from 'localforage'
 
-const key_domains = 'domains'
+import { genUUID } from '@/utils'
 
 const key_domains_store = localforage.createInstance({
   name: 'domains',
 })
 
 /**
- * 缓存domians
+ * 缓存domain
  * @param panId
- * @param domains
- */
-export const postCacheDomains = (panId: string | number, domains: Domain[]) => {
-  // localStorage.setItem(`${panId}_${key_domains}`, JSON.stringify(domains || []))
-  return key_domains_store.setItem(`${panId}_${key_domains}`, domains)
-}
-/**
- * 获取domains缓存
- * @param panId
- * @param key
+ * @param domain
  * @returns
  */
-export const getCacheDomains = (panId: string | number) => {
-  try {
-    // return JSON.parse(localStorage.getItem(`${panId}_${key_domains}`) || '') || []
-    return key_domains_store.getItem(`${panId}_${key_domains}`) || []
-  } catch (error) {
-    return []
+export const savePanDomains = async (panId: string | number, domain: Domain) => {
+  const key = `${panId}_${domain.domain}`
+  let find = await key_domains_store.getItem(key)
+  if (find) {
+    find = {
+      ...find,
+      ...domain,
+    }
+  } else {
+    find = {
+      ...domain,
+      uuid: domain.uuid ?? genUUID(),
+    }
   }
+  return key_domains_store.setItem(key, find)
+}
+/**
+ * 根据panId 获取domains
+ * @param panId
+ * @returns
+ */
+export const getPanDomains = async (panId: string | number) => {
+  const keys = await key_domains_store.keys()
+  const promises: Promise<any>[] = []
+  keys
+    .filter((item) => {
+      return item.split('_')[0] === panId
+    })
+    .forEach(async (k) => {
+      promises.push(key_domains_store.getItem(k))
+    })
+  return Promise.all(promises)
+}
+/**
+ * 根据panId删除domains
+ * @param panId
+ * @returns
+ */
+export const removeDomainsByPanId = async (panId: string | number) => {
+  const keys = await key_domains_store.keys()
+  const promises: Promise<any>[] = []
+  keys
+    .filter((item) => {
+      return item.split('_')[0] === panId
+    })
+    .forEach(async (k) => {
+      promises.push(key_domains_store.removeItem(k))
+    })
+  return Promise.all(promises)
+}
+/**
+ * 根据 panId 和 domain.uuid删除一条记录
+ * @param panId
+ * @param domain
+ * @returns
+ */
+export const removePanDomainById = (panId: string | number, domain: Domain) => {
+  return key_domains_store.removeItem(`${panId}_${domain.uuid}`) || []
 }
