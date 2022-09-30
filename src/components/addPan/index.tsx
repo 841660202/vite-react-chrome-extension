@@ -41,7 +41,14 @@ const AddPanModal: React.FC<IProps> = forwardRef((props, ref) => {
     })
   })
   return (
-    <Modal className="custom" open={visible} title="新增标签" onCancel={() => setVisible(false)} onOk={handleSubmit}>
+    <Modal
+      forceRender
+      className="custom"
+      open={visible}
+      title="新增标签"
+      onCancel={() => setVisible(false)}
+      onOk={handleSubmit}
+    >
       <Form
         initialValues={{
           ft_color: randomColor(),

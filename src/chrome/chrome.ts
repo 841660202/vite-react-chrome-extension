@@ -57,3 +57,10 @@ export const getChromeCurrentCookies = async (domain: Domain) => {
     return formatCookie(res as Cookie[])
   }
 }
+
+export const setBadgeText = async (tab: chrome.action.BadgeTextDetails) => {
+  if (mock) {
+    return
+  }
+  return await chrome.action.setBadgeText(tab)
+}

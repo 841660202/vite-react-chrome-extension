@@ -58,6 +58,7 @@ const EditEnvModal: React.FC<IProps> = forwardRef((props, ref) => {
         title="更新标签"
         onCancel={() => setVisible(false)}
         onOk={handleSubmit}
+        forceRender
       >
         <Form
           initialValues={{

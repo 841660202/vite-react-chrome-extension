@@ -26,7 +26,7 @@ export const GlobalContext = React.createContext<IGlobalContext>({} as IGlobalCo
 export const useGlobalState = () => {
   const [lang, setLang] = useState('zh')
   const [domains, setDomains] = useState<Domain[]>([] as Domain[])
-  const [panActiveUUID, setPanActiveUUID] = useState(null)
+  const [panActiveUUID, setPanActiveUUID] = useState('')
   const [currentDomain, setCurrentDomain] = useState<Domain>({} as Domain)
   const [pans, setPans] = useState<Pan[]>([] as Pan[])
   const event$ = useEventEmitter()

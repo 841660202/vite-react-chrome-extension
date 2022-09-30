@@ -3,6 +3,7 @@ import { useMemoizedFn } from 'ahooks'
 import { Tooltip } from 'antd'
 import React, { useState } from 'react'
 
+import { getChromeCurrentTab, setBadgeText } from '@/chrome/chrome'
 import { savePanRun } from '@/chrome/pan-run'
 import useGlobalContext from '@/context/globalContext'
 
@@ -13,6 +14,9 @@ const HeaderRun: React.FC<IProps> = (props) => {
   const [run, setRun] = useState(false)
   const handleRun = useMemoizedFn(async (isRun) => {
     const res = await savePanRun({ uuid: panActiveUUID } as Pan, isRun)
+    const tab = await getChromeCurrentTab()
+
+    setBadgeText({ tabId: tab.id, text: isRun ? 'run' : '' })
     setRun(isRun)
   })
   return (
