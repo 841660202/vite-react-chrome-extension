@@ -1,5 +1,5 @@
-import { MenuUnfoldOutlined, ReloadOutlined } from '@ant-design/icons'
-import { Avatar, Layout, Space, Tooltip } from 'antd'
+import { MenuUnfoldOutlined } from '@ant-design/icons'
+import { Avatar, Layout, Space } from 'antd'
 import React, { useRef } from 'react'
 
 import useGlobalContext from '@/context/globalContext'
@@ -7,6 +7,7 @@ import useGlobalContext from '@/context/globalContext'
 import HeaderAddType from './header-add'
 import HeaderAddPan from './header-addpan'
 import HeaderMore from './header-more'
+import HeaderRefresh from './header-refresh'
 import HeaderRun from './header-run'
 import styles from './index.module.less'
 import SiderDrawer from './sider-drawer'
@@ -26,9 +27,7 @@ const LayoutHeader: React.FC<IProps> = () => {
         <div className={styles.headerLeft}>{currentDomain?.domain}</div>
         <div className={styles.headerRight}>
           <Space>
-            <Tooltip title="刷新">
-              <ReloadOutlined className={styles.btn} />
-            </Tooltip>
+            <HeaderRefresh />
             <HeaderAddType />
             <HeaderRun />
             <HeaderMore />

@@ -1,14 +1,15 @@
 {
   "name": "vite-chrome-extension",
-  "description": "又快又爽的开发 Chrome 扩展程序应用",
+  "description": "Chrome 扩展程序应用",
   "version": "0.0.1",
   "author": {
-    "name": "Kip",
-    "email": "kipsong@sina.com"
+    "name": "841660202",
+    "email": "841660202@qq.com"
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit --skipLibCheck && vite build ",
+    "build:dev": "tsc --noEmit --skipLibCheck && vite build ",
+    "build": "tsc --noEmit --skipLibCheck && vite build --mode pro",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -17,16 +18,20 @@
     "antd": "^4.23.2",
     "classnames": "^2.3.2",
     "localforage": "^1.10.0",
+    "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-color": "^2.19.3",
+    "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.4.1"
   },
   "devDependencies": {
     "@types/chrome": "^0.0.170",
+    "@types/lodash": "^4.14.186",
     "@types/node": "^16.11.12",
     "@types/react": "^18.0.21",
     "@types/react-color": "^3.0.6",
+    "@types/react-copy-to-clipboard": "^5.0.4",
     "@types/react-dom": "^18.0.6",
     "@types/react-router-dom": "^5.3.3",
     "@typescript-eslint/eslint-plugin": "^5.38.0",
@@ -44,6 +49,7 @@
     "rollup-plugin-copy": "^3.4.0",
     "typescript": "^4.4.4",
     "vite": "^2.7.1",
+    "vite-plugin-imp": "^2.3.0",
     "vite-plugin-style-import": "^1.4.0"
   }
 }

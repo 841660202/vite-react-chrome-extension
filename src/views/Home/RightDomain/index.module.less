@@ -1,0 +1,60 @@
+.content {
+  min-width: 600px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 100%;
+  padding-top: 30px;
+  overflow-y: hidden;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 760px;
+  font-size: 16px;
+  position: fixed;
+  background-color: #fff;
+  .headerLeft {
+    flex: 1;
+  }
+  .headerRight {
+    width: auto;
+  }
+}
+
+.editItem {
+}
+
+.leftContent {
+  border-right: 1px solid #f5f6f7;
+  position: relative;
+  overflow-y: auto;
+  .domainInputContent {
+    padding: 10px 6px 10px 10px;
+    .domainInput {
+      margin-right: 10px;
+    }
+    background-color: #fff;
+    position: fixed;
+    z-index: 99;
+    width: calc(50vw - 45px);
+    min-width: 350px;
+    top: 48px;
+  }
+
+  .domains {
+    background-color: #fff;
+    padding-top: 50px;
+    padding-left: 10px;
+    min-height: 100%;
+  }
+}
+.rightContent {
+  padding-left: 20px;
+  padding-top: 10px;
+  overflow-y: auto;
+  padding-right: 30px;
+  background-color: #fff;
+}

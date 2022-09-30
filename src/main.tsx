@@ -1,4 +1,5 @@
 import './index.css'
+import 'antd/dist/antd.less'
 
 import React, { lazy, Suspense } from 'react'
 import ReactDOM from 'react-dom/client'

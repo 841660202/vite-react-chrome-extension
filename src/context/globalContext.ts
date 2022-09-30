@@ -1,4 +1,5 @@
-import { useMemoizedFn } from 'ahooks'
+import { useEventEmitter, useMemoizedFn } from 'ahooks'
+import { EventEmitter } from 'ahooks/lib/useEventEmitter'
 import React, { useContext, useMemo, useState } from 'react'
 
 interface IGlobalContext {
@@ -13,6 +14,8 @@ interface IGlobalContext {
 
   pans: Pan[]
   setPans: (v: Pan[]) => void
+
+  event$: EventEmitter<any>
 }
 
 export const GlobalContext = React.createContext<IGlobalContext>({} as IGlobalContext)
@@ -22,7 +25,7 @@ export const useGlobalState = () => {
   const [domains, setDomains] = useState<Domain[]>([] as Domain[])
   const [currentDomain, setCurrentDomain] = useState<Domain>({} as Domain)
   const [pans, setPans] = useState<Pan[]>([] as Pan[])
-
+  const event$ = useEventEmitter()
   return useMemo(() => {
     return {
       lang,
@@ -36,8 +39,9 @@ export const useGlobalState = () => {
 
       pans,
       setPans,
+      event$,
     }
-  }, [lang, domains, currentDomain, pans])
+  }, [lang, domains, currentDomain, pans, event$])
 }
 
 export const useGlobalContext = () => {

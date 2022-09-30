@@ -48,6 +48,8 @@ const AddPanModal: React.FC<IProps> = forwardRef((props, ref) => {
           bg_color: randomColor(),
         }}
         form={form}
+        labelCol={{ span: 4 }}
+        wrapperCol={{ span: 16 }}
       >
         <Form.Item name="name" label="标签名" rules={[{ required: true, message: '请输入' }]}>
           <Input placeholder="请输入" />

@@ -1,3 +1,5 @@
+import { formatCookie } from './utils'
+
 const mock = true
 export const getChromeCurrentTab = async () => {
   if (mock) {
@@ -30,5 +32,28 @@ export const getChromeCurrentTab = async () => {
   } else {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
     return tab
+  }
+}
+
+export const getChromeCurrentCookies = async (domain: Domain) => {
+  if (mock) {
+    return formatCookie([
+      {
+        domain: 'localhost',
+        expirationDate: 1697771286.460391,
+        hostOnly: true,
+        httpOnly: false,
+        name: 'perfLang',
+        path: '/',
+        sameSite: 'strict',
+        secure: false,
+        session: false,
+        storeId: '0',
+        value: 'zh',
+      },
+    ])
+  } else {
+    const res = await chrome.cookies.getAll(domain)
+    return formatCookie(res as Cookie[])
   }
 }

@@ -3,6 +3,7 @@ import { Dropdown } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { SketchPicker } from 'react-color'
 
+import styles from './index.module.less'
 interface IProps {
   value?: string
   onChange?: (v: string) => void
@@ -24,10 +25,7 @@ const ColorPicker: React.FC<IProps> = (props) => {
   return (
     <>
       <Dropdown overlay={<SketchPicker color={color} onChangeComplete={handleChange}></SketchPicker>}>
-        <div
-          style={{ width: 20, height: 20, background: color || '#000', cursor: 'pointer' }}
-          onClick={() => setVisible(!visible)}
-        />
+        <div className={styles.rect} style={{ background: color }} onClick={() => setVisible(!visible)} />
       </Dropdown>
     </>
   )

@@ -1,136 +1,72 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react'
-const { Panel } = Collapse
-import { CloseCircleOutlined } from '@ant-design/icons'
 import { useMemoizedFn } from 'ahooks'
-import { Button, Checkbox, Collapse, Input } from 'antd'
-import classNames from 'classnames'
+import { message } from 'antd'
+import _ from 'lodash'
+import React, { useContext, useEffect } from 'react'
 
-import { getChromeCurrentTab } from '@/chrome/chrome'
-import { getAllCookies } from '@/chrome/cookies'
-import { getPanDomainsByPanId, removePanDomainById, savePanDomain } from '@/chrome/domains'
-import { getOrCreateCurrentDomainByPanId } from '@/chrome/pan-current-domain'
-import { getPans, savePan } from '@/chrome/pans'
-import PanEdit from '@/components/PanEdit'
+import { getChromeCurrentCookies, getChromeCurrentTab } from '@/chrome/chrome'
+import { getPanDomainsByPanId } from '@/chrome/domains'
+import { getOrCreateCurrentDomainByPanId, saveCurrentDomainByPanId } from '@/chrome/pan-current-domain'
 import { GlobalContext } from '@/context/globalContext'
-import { mock } from '@/mock'
 import { genUUID } from '@/utils'
 
-import styles from './index.module.less'
+import LeftDomains from './LeftDomain'
+import RightDomain from './RightDomain'
 
 interface IProps {}
 // const domains = ['www.baidu.com', 'www.baidu.cn', 'www.baidu.top']
-const Home: React.FC<IProps> = (props) => {
+const Home: React.FC<IProps> = () => {
   const panId = '123'
-  const [hostname, setHostname] = useState<string>(mock.hostname)
-  const [inputValue, setInputValue] = useState('')
-  const { domains, setDomains, currentDomain, setCurrentDomain } = useContext(GlobalContext)
-  const handleInit = useCallback(async () => {
+  const { setDomains, setCurrentDomain, event$ } = useContext(GlobalContext)
+  // 初始化
+  const handleInit = useMemoizedFn(async () => {
     const tab = await getChromeCurrentTab()
     if (tab?.url) {
-      try {
-        const url = new URL(tab.url)
-        handleGetCurrentDomain({ domain: url.hostname })
-        setHostname(url.hostname)
-      } catch {}
+      const url = new URL(tab.url)
+      // 获取当前浏览器对应tab的域名
+      handleGetChromeCurrentDomain({ domain: url.hostname })
     }
-  }, [])
-
-  const handleGetCurrentDomain = useMemoizedFn(async (domain) => {
-    const res = await getOrCreateCurrentDomainByPanId(panId, domain)
-    setCurrentDomain(res)
   })
-  useEffect(() => {
+
+  // 当前pan的cookie = 缓存 + 当前tab的cookie
+  const handleGetChromeCurrentDomain = useMemoizedFn(async (domain) => {
+    // 获取当前pan right已缓存,域名对应的cookie
+    const res = await getOrCreateCurrentDomainByPanId(panId, domain)
+    // 获取当前域名 chrome的cookie
+    const chromeCookies = (await getChromeCurrentCookies(domain)).map((item: Cookie) => {
+      return { ...item, checked: true, uuid: genUUID() }
+    })
+    // cookie去重
+    const cookies = _.unionBy(chromeCookies as Cookie[], res.cookies || [], 'name')
+    domain.cookies = cookies
+    // 更新缓存, 返回为当前缓存的domain对象
+    const res_save = await saveCurrentDomainByPanId(panId, domain)
+    // 展示当前pan 右侧信息
+    setCurrentDomain(res_save)
+  })
+  const handleRefresh = useMemoizedFn(() => {
     handleInit()
     handleGetPanDomainsByPanId()
+  })
+  event$.useSubscription((val) => {
+    if (val == 'refresh') {
+      message.success('刷新成功')
+      handleRefresh()
+    }
+  })
+  useEffect(() => {
+    handleRefresh()
   }, [])
 
-  const handleGetDomainInfo = useMemoizedFn(async (domain: Domain) => {
-    const res = await getAllCookies({ domain: domain.domain })
-    const target = domains.find((item) => item.uuid === domain.uuid)
-    let _domain
-    if (target) {
-      target.cookies = res
-      _domain = target
-    } else {
-      domain.cookies = res
-      _domain = domain
-      // domains.push(domain)
-    }
-    handleSavePanDomains(_domain)
-    // setDomains(domains)
-  })
-
-  const handleAdd = useCallback(
-    (e: any) => {
-      if (!inputValue) return
-      const domain: Domain = { domain: inputValue, cookies: [], uuid: genUUID() }
-      setDomains(([] as Domain[]).concat(domains).concat(domain))
-      setInputValue('')
-      handleGetDomainInfo(domain)
-      // message.success('success')
-      e?.preventDefault()
-    },
-    [domains, handleGetDomainInfo, inputValue, setDomains],
-  )
-
-  const handleSavePanDomains = useMemoizedFn(async (domain) => {
-    console.log('domain', domain)
-    const res = await savePanDomain(panId, domain)
-    console.log('res', res)
-  })
-
+  // 获取左侧缓存的域名
   const handleGetPanDomainsByPanId = useMemoizedFn(async () => {
     const res = await getPanDomainsByPanId(panId)
     setDomains(res)
   })
-  const handleChangeInput = useCallback((e: any) => {
-    setInputValue(e.target.value)
-  }, [])
-  const handleCloseDomain = useMemoizedFn(async (domain, e) => {
-    e?.stopPropagation()
-    const res = await removePanDomainById(panId, domain)
-    handleGetPanDomainsByPanId()
-  })
+
   return (
     <div className={'custom flex-row'} style={{ overflowY: 'hidden', height: '100%' }}>
-      <div className={classNames('flex-1', styles.leftContent)}>
-        <div className={classNames('flex-row', styles.domainInputContent)}>
-          <Input
-            value={inputValue}
-            onChange={handleChangeInput}
-            placeholder="新域名"
-            size="small"
-            onPressEnter={handleAdd}
-            className={styles.domainInput}
-          />
-          <Button type="primary" size="small" onClick={handleAdd}>
-            增加
-          </Button>
-        </div>
-        <div className={styles.domains}>
-          <Collapse defaultActiveKey={['1']} ghost>
-            {domains.map((item) => (
-              <Panel
-                header={
-                  <div className="flex-row-c" style={{ paddingRight: 10 }}>
-                    <Checkbox>{item.domain}</Checkbox>
-
-                    <CloseCircleOutlined onClick={(e) => handleCloseDomain(item, e)} style={{ marginLeft: 10 }} />
-                  </div>
-                }
-                key={item.uuid}
-              >
-                <PanEdit disabled category={'Cookies'} type="cookies" data={item} />
-              </Panel>
-            ))}
-          </Collapse>
-        </div>
-      </div>
-      <div className={classNames('flex-1', styles.rightContent)}>
-        <PanEdit category={'Cookies'} type="cookies" data={currentDomain} />
-        {/* <PanEdit category="Request Header" /> */}
-        {/* <PanEdit category="Reponse Header" /> */}
-      </div>
+      <LeftDomains />
+      <RightDomain />
     </div>
   )
 }

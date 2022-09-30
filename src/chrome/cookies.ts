@@ -297,14 +297,14 @@ export const updateCookie = async (cookie: Cookie) => {
     url: cookie.domain,
     name: cookie.name,
   })
-  return await chrome.cookies.set(cookie)
+  return await chrome.cookies.set(cookie as chrome.cookies.SetDetails)
 }
 /**
  * 删除cookie
  * @param cookie
  */
 export const removeCookie = async (cookie: Pick<Cookie, 'name' | 'url'>) => {
-  return await chrome.cookies.remove(cookie)
+  return await chrome.cookies.remove(cookie as chrome.cookies.Details)
 }
 /**
  * 获取某个k的值
@@ -312,7 +312,7 @@ export const removeCookie = async (cookie: Pick<Cookie, 'name' | 'url'>) => {
  * @returns
  */
 export const getCookieKeyValue = async (cookie: Pick<Cookie, 'name' | 'url'>) => {
-  return await chrome.cookies.get(cookie)
+  return await chrome.cookies.get(cookie as chrome.cookies.Details)
 }
 /**
  * 获取相关域名所有k-v

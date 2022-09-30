@@ -14,7 +14,7 @@ declare interface IRefModal {
 
 declare interface Cookie {
   domain: string
-  url: string
+  url?: string
   expirationDate: number
   httpOnly: boolean
   hostOnly?: boolean
@@ -26,14 +26,18 @@ declare interface Cookie {
   storeId: string
   value: string
   checked?: boolean
+  [key: string]: any
 }
 
 declare interface Domain {
   domain: string
-  cookies: []
+  cookies: Partial<Cookie>[]
   checked?: boolean
   uuid: string
   tag?: 'day' | 'test' | 'pre' | 'pro'
+  open?: boolean
+  env?: string
+  env_color?: string
 }
 
 declare interface Pan {
@@ -47,4 +51,6 @@ declare interface Pan {
 declare interface CellEdit {
   name: string
   value: string
+  checked?: boolean
+  uuid?: string
 }
