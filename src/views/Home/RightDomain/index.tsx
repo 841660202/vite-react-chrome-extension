@@ -22,7 +22,14 @@ const RightDomain: React.FC<IProps> = () => {
 
   return (
     <div className={classNames('flex-1', styles.rightContent)}>
-      <PanEdit addable onChange={handleChangeRightDomain} category={'Cookies'} type="cookies" data={currentDomain} />
+      <PanEdit
+        envVisble
+        addable
+        onChange={handleChangeRightDomain}
+        category={'Cookies'}
+        type="cookies"
+        data={currentDomain}
+      />
       {/* <PanEdit category="Request Header" /> */}
       {/* <PanEdit category="Reponse Header" /> */}
     </div>

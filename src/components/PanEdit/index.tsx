@@ -14,9 +14,10 @@ interface IProps {
   data?: Domain
   type: 'cookies'
   onChange?: (data: Domain) => void
+  envVisble?: boolean
 }
 const PanEdit: React.FC<IProps> = (props) => {
-  const { disabled, category, type, data, addable } = props
+  const { disabled, category, type, data, addable, envVisble } = props
   const [checkAll, setCheckAll] = useState(false)
 
   const handleChange = useMemoizedFn((cookie) => {
@@ -77,8 +78,9 @@ const PanEdit: React.FC<IProps> = (props) => {
       </p>
       {data?.[type]?.map((item: any, index: number) => (
         <CheckEdit
+          envVisble={envVisble}
           onDelete={() => handleDelete(item, index)}
-          onChange={(v) => handleChange(v, index)}
+          onChange={(v) => handleChange(v)}
           key={index}
           data={item}
           disabled={disabled}

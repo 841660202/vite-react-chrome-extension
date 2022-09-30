@@ -16,6 +16,9 @@ interface IGlobalContext {
   setPans: (v: Pan[]) => void
 
   event$: EventEmitter<any>
+
+  panActiveUUID: string
+  setPanActiveUUID: (v: string) => void
 }
 
 export const GlobalContext = React.createContext<IGlobalContext>({} as IGlobalContext)
@@ -23,6 +26,7 @@ export const GlobalContext = React.createContext<IGlobalContext>({} as IGlobalCo
 export const useGlobalState = () => {
   const [lang, setLang] = useState('zh')
   const [domains, setDomains] = useState<Domain[]>([] as Domain[])
+  const [panActiveUUID, setPanActiveUUID] = useState(null)
   const [currentDomain, setCurrentDomain] = useState<Domain>({} as Domain)
   const [pans, setPans] = useState<Pan[]>([] as Pan[])
   const event$ = useEventEmitter()
@@ -39,9 +43,13 @@ export const useGlobalState = () => {
 
       pans,
       setPans,
+
       event$,
+
+      panActiveUUID,
+      setPanActiveUUID,
     }
-  }, [lang, domains, currentDomain, pans, event$])
+  }, [lang, domains, currentDomain, pans, event$, panActiveUUID])
 }
 
 export const useGlobalContext = () => {

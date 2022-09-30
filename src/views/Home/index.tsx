@@ -1,6 +1,6 @@
 import { useMemoizedFn } from 'ahooks'
 import { message } from 'antd'
-import _ from 'lodash'
+import { unionBy } from 'lodash'
 import React, { useContext, useEffect } from 'react'
 
 import { getChromeCurrentCookies, getChromeCurrentTab } from '@/chrome/chrome'
@@ -36,7 +36,7 @@ const Home: React.FC<IProps> = () => {
       return { ...item, checked: true, uuid: genUUID() }
     })
     // cookie去重
-    const cookies = _.unionBy(chromeCookies as Cookie[], res.cookies || [], 'name')
+    const cookies = unionBy(chromeCookies as Cookie[], res.cookies || [], 'name')
     domain.cookies = cookies
     // 更新缓存, 返回为当前缓存的domain对象
     const res_save = await saveCurrentDomainByPanId(panId, domain)

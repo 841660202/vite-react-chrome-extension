@@ -5,9 +5,10 @@ import classNames from 'classnames'
 import React, { useCallback, useContext, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import { getPanRun, savePanRun } from '@/chrome/pan-run'
 import { getPans } from '@/chrome/pans'
 import NumberIcon from '@/components/NumberIcon'
-import { GlobalContext } from '@/context/globalContext'
+import useGlobalContext, { GlobalContext } from '@/context/globalContext'
 
 import styles from './index.module.less'
 const { Sider } = Layout
@@ -15,6 +16,7 @@ const { Sider } = Layout
 interface IProps {}
 const LayoutSider: React.FC<IProps> = () => {
   const navigate = useNavigate()
+  const { panActiveUUID, setPanActiveUUID } = useGlobalContext()
   const handleGo = useCallback((item: any) => {
     console.log('item.key', item.key)
     navigate(item.key)
@@ -23,8 +25,9 @@ const LayoutSider: React.FC<IProps> = () => {
   const { pans, setPans } = useContext(GlobalContext)
 
   const handleGetPans = useMemoizedFn(async () => {
-    const res = await getPans()
-    setPans(res || [])
+    const res = (await getPans()) || []
+    setPans(res)
+    handleGetPanActive(res)
   })
 
   const menuItems = useMemo(() => {
@@ -35,7 +38,6 @@ const LayoutSider: React.FC<IProps> = () => {
 
     return ([] as any).concat(defaultMenus).concat(
       pans.map((item: Pan, index) => {
-        console.log(`/pan/${item.uuid}`)
         return {
           icon: <NumberIcon text={index + 1} ft_color={item.ft_color} bg_color={item.bg_color} />,
           title: item.name,
@@ -44,6 +46,20 @@ const LayoutSider: React.FC<IProps> = () => {
       }),
     )
   }, [pans])
+
+  const handleGetPanActive = useMemoizedFn(async (pans: Pan[]) => {
+    const res = await getPanRun()
+    if (res) {
+      setPanActiveUUID(res)
+    } else {
+      // 没有激活的，默认选中第一个
+      if (pans?.length > 0) {
+        const uuid: string = pans[0].uuid
+        setPanActiveUUID(uuid)
+        savePanRun(pans[0])
+      }
+    }
+  })
 
   useEffect(() => {
     handleGetPans()

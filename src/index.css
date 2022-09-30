@@ -39,3 +39,15 @@ body {
   align-items: center;
   justify-content: space-between;
 }
+
+.dot-rect {
+  font-size: 12px;
+  background-color: blueviolet;
+  color: #fff;
+  margin-right: 10px;
+  border-radius: 4px;
+  padding: 0 6px;
+  width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

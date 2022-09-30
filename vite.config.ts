@@ -1,7 +1,10 @@
 import react from '@vitejs/plugin-react'
 import { resolve } from 'path'
 import copy from 'rollup-plugin-copy'
+import { terser } from 'rollup-plugin-terser'
+import { visualizer } from 'rollup-plugin-visualizer'
 import { defineConfig, loadEnv } from 'vite'
+import viteCompression from 'vite-plugin-compression'
 import vitePluginImp from 'vite-plugin-imp'
 import styleImport from 'vite-plugin-style-import'
 
@@ -15,14 +18,6 @@ const plugins = [
   //     },
   //   ],
   // }),
-  vitePluginImp({
-    libList: [
-      {
-        libName: 'antd',
-        style: (name) => `antd/es/${name}/style`,
-      },
-    ],
-  }),
   react(),
   copy({
     targets: [
@@ -31,6 +26,13 @@ const plugins = [
     ],
     hook: 'writeBundle',
   }),
+  // viteCompression({
+  //   verbose: true,
+  //   disable: false,
+  //   threshold: 10240,
+  //   algorithm: 'gzip',
+  //   ext: '.gz',
+  // }),
 ]
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -45,6 +47,23 @@ export default defineConfig(({ mode }) => {
           },
         ],
       }),
+      terser({
+        compress: {
+          defaults: false,
+          // drop_console: true,
+        },
+        mangle: {
+          eval: true,
+          module: true,
+          toplevel: true,
+          safari10: true,
+          properties: false,
+        },
+        output: {
+          comments: false,
+        },
+      }),
+      visualizer(),
     )
   }
   return {
@@ -75,7 +94,6 @@ export default defineConfig(({ mode }) => {
           chunkFileNames: '[name].[hash].js',
           assetFileNames: '[name].[hash].[ext]',
           entryFileNames: '[name].js',
-          dir: 'dist',
         },
       },
     },
